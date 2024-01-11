@@ -5,6 +5,7 @@ import Loader from 'react-loader-spinner'
 import AppContext from '../../context/AppContext'
 import Header from '../Header'
 import Sidebar from '../Sidebar'
+import VideosFailureView from '../VideosFailureView'
 
 import {
   BgContainer,
@@ -19,15 +20,8 @@ import {
   GameBanner,
   Title,
   Description,
-} from './styledComponent'
-
-import {
   LoaderContainer,
-  ImageEl,
-  FailureHeading,
-  FailureDescription,
-  RetryButton,
-} from '../VideoItemDetails/styledComponent'
+} from './styledComponent'
 
 // status object
 const statusConstant = {
@@ -109,34 +103,6 @@ class Gaming extends Component {
     </AppContext.Consumer>
   )
 
-  // render failure view
-  getFailureView = () => (
-    <AppContext.Consumer>
-      {value => {
-        const {lightTheme} = value
-        const failureImage = lightTheme
-          ? 'https://assets.ccbp.in/frontend/react-js/nxt-watch-failure-view-light-theme-img.png'
-          : 'https://assets.ccbp.in/frontend/react-js/nxt-watch-failure-view-dark-theme-img.png'
-
-        return (
-          <LoaderContainer>
-            <ImageEl src={failureImage} alt="failure view" />
-            <FailureHeading lightTheme={lightTheme}>
-              Oops! Something Went Wrong
-            </FailureHeading>
-            <FailureDescription>
-              We are having some trouble to complete your request. Please try
-              again.
-            </FailureDescription>
-            <RetryButton type="button" onClick={this.getGamingData}>
-              Retry
-            </RetryButton>
-          </LoaderContainer>
-        )
-      }}
-    </AppContext.Consumer>
-  )
-
   // render Loader view
   getLoadingView = () => (
     <LoaderContainer data-testid="loader">
@@ -151,7 +117,7 @@ class Gaming extends Component {
       case statusConstant.success:
         return this.getSuccessView()
       case statusConstant.failure:
-        return this.getFailureView()
+        return <VideosFailureView onRetry={this.getGamingData} />
       case statusConstant.inProgress:
         return this.getLoadingView()
 

@@ -6,6 +6,7 @@ import AppContext from '../../context/AppContext'
 import Header from '../Header'
 import Sidebar from '../Sidebar'
 import TrendingItem from '../TrendingItem'
+import VideosFailureView from '../VideosFailureView'
 
 import {
   BgContainer,
@@ -16,10 +17,6 @@ import {
   Heading,
   ListEl,
   LoaderContainer,
-  ImageEl,
-  FailureHeading,
-  FailureDescription,
-  RetryButton,
 } from './styledComponent'
 
 const statusConstant = {
@@ -96,34 +93,6 @@ class Trending extends Component {
     </AppContext.Consumer>
   )
 
-  // render failure view
-  getFailureView = () => (
-    <AppContext.Consumer>
-      {value => {
-        const {lightTheme} = value
-        const failureImage = lightTheme
-          ? 'https://assets.ccbp.in/frontend/react-js/nxt-watch-failure-view-light-theme-img.png'
-          : 'https://assets.ccbp.in/frontend/react-js/nxt-watch-failure-view-dark-theme-img.png'
-
-        return (
-          <LoaderContainer>
-            <ImageEl src={failureImage} alt="failure view" />
-            <FailureHeading lightTheme={lightTheme}>
-              Oops! Something Went Wrong
-            </FailureHeading>
-            <FailureDescription>
-              We are having some trouble to complete your request. Please try
-              again.
-            </FailureDescription>
-            <RetryButton type="button" onClick={this.getTrendingData}>
-              Retry
-            </RetryButton>
-          </LoaderContainer>
-        )
-      }}
-    </AppContext.Consumer>
-  )
-
   // render Loader view
   getLoadingView = () => (
     <LoaderContainer data-testid="loader">
@@ -137,7 +106,7 @@ class Trending extends Component {
       case statusConstant.success:
         return this.getSuccessView()
       case statusConstant.failure:
-        return this.getFailureView()
+        return <VideosFailureView onRetry={this.getTrendingData} />
       case statusConstant.inProgress:
         return this.getLoadingView()
 

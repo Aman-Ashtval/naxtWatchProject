@@ -119,3 +119,12 @@ export const Description = styled.p`
     font-size: 14px;
   }
 `
+
+// Loader Container div
+export const LoaderContainer = styled.div`
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`

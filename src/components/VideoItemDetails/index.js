@@ -9,6 +9,7 @@ import {RiPlayListAddLine} from 'react-icons/ri'
 import Header from '../Header'
 import Sidebar from '../Sidebar'
 import AppContext from '../../context/AppContext'
+import VideosFailureView from '../VideosFailureView'
 
 import {
   BgContainer,
@@ -28,10 +29,6 @@ import {
   Title,
   Description,
   LoaderContainer,
-  ImageEl,
-  FailureHeading,
-  FailureDescription,
-  RetryButton,
 } from './styledComponent'
 
 // api constant values
@@ -200,34 +197,6 @@ class VideoItemDetails extends Component {
     </AppContext.Consumer>
   )
 
-  // render failure view
-  getFailureView = () => (
-    <AppContext.Consumer>
-      {value => {
-        const {lightTheme} = value
-        const failureImage = lightTheme
-          ? 'https://assets.ccbp.in/frontend/react-js/nxt-watch-failure-view-light-theme-img.png'
-          : 'https://assets.ccbp.in/frontend/react-js/nxt-watch-failure-view-dark-theme-img.png'
-
-        return (
-          <LoaderContainer>
-            <ImageEl src={failureImage} alt="failure view" />
-            <FailureHeading lightTheme={lightTheme}>
-              Oops! Something Went Wrong
-            </FailureHeading>
-            <FailureDescription>
-              We are having some trouble to complete your request. Please try
-              again.
-            </FailureDescription>
-            <RetryButton type="button" onClick={this.getVideoDetails}>
-              Retry
-            </RetryButton>
-          </LoaderContainer>
-        )
-      }}
-    </AppContext.Consumer>
-  )
-
   // render Loader view
   getLoadingView = () => (
     <LoaderContainer data-testid="loader">
@@ -244,7 +213,7 @@ class VideoItemDetails extends Component {
       case responseConstants.inProgress:
         return this.getLoadingView()
       case responseConstants.failure:
-        return this.getFailureView()
+        return <VideosFailureView onRetry={this.getVideoDetails} />
 
       default:
         return null

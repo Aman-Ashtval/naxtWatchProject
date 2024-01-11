@@ -29,6 +29,7 @@ import AppContext from '../../context/AppContext'
 import Header from '../Header'
 import Sidebar from '../Sidebar'
 import VideoItem from '../VideoItem'
+import VideosFailureView from '../VideosFailureView'
 
 // status object
 const statusConstant = {
@@ -144,34 +145,6 @@ class Home extends Component {
     )
   }
 
-  // render failure view
-  getFailureView = () => (
-    <AppContext.Consumer>
-      {value => {
-        const {lightTheme} = value
-        const failureImage = lightTheme
-          ? 'https://assets.ccbp.in/frontend/react-js/nxt-watch-failure-view-light-theme-img.png'
-          : 'https://assets.ccbp.in/frontend/react-js/nxt-watch-failure-view-dark-theme-img.png'
-
-        return (
-          <LoaderContainer>
-            <ImageEl src={failureImage} alt="failure view" />
-            <Heading lightTheme={lightTheme}>
-              Oops! Something Went Wrong
-            </Heading>
-            <ParagraphEl>
-              We are having some trouble to complete your request. Please try
-              again.
-            </ParagraphEl>
-            <RetryButton type="button" onClick={this.retrySearchItem}>
-              Retry
-            </RetryButton>
-          </LoaderContainer>
-        )
-      }}
-    </AppContext.Consumer>
-  )
-
   // Render Loading View method
   getLoadingView = () => (
     <LoaderContainer data-testid="loader">
@@ -187,7 +160,7 @@ class Home extends Component {
       case statusConstant.success:
         return this.getVideosListView()
       case statusConstant.failure:
-        return this.getFailureView()
+        return <VideosFailureView onRetry={this.getVideoData} />
 
       default:
         return null
